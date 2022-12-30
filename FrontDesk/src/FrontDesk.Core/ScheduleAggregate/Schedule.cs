@@ -59,11 +59,9 @@ namespace FrontDesk.Core.ScheduleAggregate
 
       MarkConflictingAppointments();
 
-      // TODO: Add appointment deleted event and show delete message in Blazor client app
+      AppointmentDeletedEvent appointmentDeletedEvenet = new(appointment);
+      Events.Add(appointmentDeletedEvenet);
     }
-
-
-
 
     private void MarkConflictingAppointments()
     {
