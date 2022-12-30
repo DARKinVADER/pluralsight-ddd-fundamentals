@@ -74,8 +74,14 @@ namespace FrontDesk.Core.ScheduleAggregate
             a != appointment)
             .ToList();
 
-        // TODO: Add a rule to mark overlapping appointments in same room as conflicting
-        // TODO: Add a rule to mark same doctor with overlapping appointments as conflicting
+        var overlappingAppointments = _appointments
+          .Where(a => a.TimeRange.Overlaps(appointment.TimeRange) && a.RoomId == appointment.RoomId && a != appointment).ToList();
+
+        var sameDoctorAppointments = _appointments
+          .Where(a => a.TimeRange.Overlaps(appointment.TimeRange) && a.DoctorId == appointment.DoctorId && a!= appointment).ToList();
+
+        potentiallyConflictingAppointments.AddRange(overlappingAppointments);
+        potentiallyConflictingAppointments.AddRange(sameDoctorAppointments);
 
         potentiallyConflictingAppointments.ForEach(a => a.IsPotentiallyConflicting = true);
 
