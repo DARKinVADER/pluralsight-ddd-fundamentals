@@ -1,7 +1,10 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
+
 using FrontDesk.Core.Events;
+
 using MediatR;
+
 using Microsoft.AspNetCore.SignalR;
 
 namespace FrontDesk.Api.Hubs

@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+
 using Ardalis.GuardClauses;
+
 using FrontDesk.Core.Events;
+
 using PluralsightDdd.SharedKernel;
 using PluralsightDdd.SharedKernel.Interfaces;
 
@@ -59,8 +62,8 @@ namespace FrontDesk.Core.ScheduleAggregate
 
       MarkConflictingAppointments();
 
-      AppointmentDeletedEvent appointmentDeletedEvenet = new(appointment);
-      Events.Add(appointmentDeletedEvenet);
+      AppointmentDeletedEvent appointmentDeletedEvent = new(appointment);
+      Events.Add(appointmentDeletedEvent); // TODO-DONE: Add appointment deleted event and show delete message in Blazor client app
     }
 
     private void MarkConflictingAppointments()

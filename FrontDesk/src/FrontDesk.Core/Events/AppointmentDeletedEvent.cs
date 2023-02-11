@@ -1,5 +1,7 @@
 ﻿using System;
+
 using FrontDesk.Core.ScheduleAggregate;
+
 using PluralsightDdd.SharedKernel;
 
 namespace FrontDesk.Core.Events
