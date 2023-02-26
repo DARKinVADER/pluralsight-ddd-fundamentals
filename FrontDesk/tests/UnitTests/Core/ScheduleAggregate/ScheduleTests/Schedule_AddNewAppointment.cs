@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Linq;
-using System.Threading.Tasks;
+
 using FrontDesk.Core.ScheduleAggregate;
+
 using PluralsightDdd.SharedKernel;
+
 using Xunit;
 
 namespace UnitTests.Core.AggregatesEntities.ScheduleTests
@@ -19,11 +21,63 @@ namespace UnitTests.Core.AggregatesEntities.ScheduleTests
     //  // TODO: Implement Test
     //}
 
-    //[Fact]
-    //public async Task MarksConflictingAppointments()
-    //{
-    //  // TODO: Implement Test
-    //}
+    [Fact]
+    public void MarksConflictingAppointments_OverlappingSameDoctor()
+    {
+      // DONE-TODO: Implement Test
+      var schedule = new Schedule(_scheduleId, _dateRange, _clinicId);
+      var appointmentType = 1;
+      var doctorIdAnna = 2;
+      var patientId = 3;
+      var roomId4 = 4;
+
+      DateTime lisaStartTime = new DateTime(2021, 01, 01, 10, 00, 00);
+      DateTime lisaEndTime = new DateTime(2021, 01, 01, 11, 00, 00);
+      var lisaDateRange = new DateTimeOffsetRange(lisaStartTime, lisaEndTime);
+      var lisaTitle = "Lisa Appointment";
+      var lisaAppointment = new Appointment(Guid.NewGuid(), appointmentType, _scheduleId, _clinicId, doctorIdAnna, patientId, roomId4, lisaDateRange, lisaTitle);
+      schedule.AddNewAppointment(lisaAppointment);
+
+      DateTime mimiStartTime = new DateTime(2021, 01, 01, 10, 30, 00);
+      DateTime mimiEndTime = new DateTime(2021, 01, 01, 11, 30, 00);
+      var mimiDateRange = new DateTimeOffsetRange(mimiStartTime, mimiEndTime);
+      var mimiTitle = "Mimi Appointment";
+      var mimiAppointment = new Appointment(Guid.NewGuid(), appointmentType, _scheduleId, _clinicId, doctorIdAnna, patientId, 5, mimiDateRange, mimiTitle);
+      schedule.AddNewAppointment(mimiAppointment);
+
+      Assert.Equal(2, schedule.Appointments.Count());
+      Assert.True(lisaAppointment.IsPotentiallyConflicting);
+      Assert.True(mimiAppointment.IsPotentiallyConflicting);
+    }
+
+    [Fact]
+    public void MarksConflictingAppointments_OverlappingSameRoom()
+    {
+      // DONE-TODO: Implement Test
+      var schedule = new Schedule(_scheduleId, _dateRange, _clinicId);
+      var appointmentType = 1;
+      var doctorIdAnna = 2;
+      var patientId = 3;
+      var roomId4 = 4;
+
+      DateTime lisaStartTime = new DateTime(2021, 01, 01, 10, 00, 00);
+      DateTime lisaEndTime = new DateTime(2021, 01, 01, 11, 00, 00);
+      var lisaDateRange = new DateTimeOffsetRange(lisaStartTime, lisaEndTime);
+      var lisaTitle = "Lisa Appointment";
+      var lisaAppointment = new Appointment(Guid.NewGuid(), appointmentType, _scheduleId, _clinicId, doctorIdAnna, patientId, roomId4, lisaDateRange, lisaTitle);
+      schedule.AddNewAppointment(lisaAppointment);
+
+      DateTime mimiStartTime = new DateTime(2021, 01, 01, 10, 30, 00);
+      DateTime mimiEndTime = new DateTime(2021, 01, 01, 11, 30, 00);
+      var mimiDateRange = new DateTimeOffsetRange(mimiStartTime, mimiEndTime);
+      var mimiTitle = "Mimi Appointment";
+      var mimiAppointment = new Appointment(Guid.NewGuid(), appointmentType, _scheduleId, _clinicId, 3, patientId, roomId4, mimiDateRange, mimiTitle);
+      schedule.AddNewAppointment(mimiAppointment);
+
+      Assert.Equal(2, schedule.Appointments.Count());
+      Assert.True(lisaAppointment.IsPotentiallyConflicting);
+      Assert.True(mimiAppointment.IsPotentiallyConflicting);
+    }
 
     [Fact]
     public void AddsAppointmentScheduledEvent()
